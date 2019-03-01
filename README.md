@@ -19,10 +19,11 @@ rtsp2webrtc_1_n
 
 # For recording .mp4 videos
 Create folder 'mkdir /mnt/av/ ' with write permissions
+
 Or update const variable 'BASE_RECORDING_PATH' in file rtsp_webrtc_1_n.cpp accordingly
 
 # Running binary
-./rtsp2webrtc_1_n <SIGNALLING SERVER URL> <PEER ID NOTED FROM BROWSER> <PCAP FILE PATH> <RTP SOURCE IP> <RTP SOURCE PORT>
+./rtsp2webrtc_1_n |SIGNALLING SERVER URL| |PEER ID NOTED FROM BROWSER| |PCAP FILE PATH| |RTP SOURCE IP| |RTP SOURCE PORT|
 
 Example: ./rtsp2webrtc_1_n wss://127.0.0.1:8443 1232 /home/user/pcap_recording_webrtc_stuttering_10_56598.pcap 192.168.0.10 56598
 
