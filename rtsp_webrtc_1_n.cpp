@@ -46,6 +46,7 @@ const std::string BASE_RECORDING_PATH = "/mnt/av/";
 std::string SIGNAL_SERVER = "wss://127.0.0.1:8443";
 
 const bool FROM_PCAP = true;
+const bool START_WEBRTC = true;
 std::string PCAP_PATH = "";
 std::string PCAP_SRC_IP = "";
 std::string PCAP_SRC_PORT = "";
@@ -515,6 +516,7 @@ gboolean WebrtcViewer::start_webrtcbin(void) {
     //Create queue
     tmp = g_strdup_printf("queue-%s", this->peer_id.c_str());
     queue = gst_element_factory_make("queue", tmp);
+    //g_object_set(queue, "leaky", 2, NULL);
     g_free(tmp);
 
     //Create rtph264depay with caps
@@ -1150,7 +1152,7 @@ gboolean RtspPipelineHandler::start_streaming() {
                           string(" ! pcapparse src-ip=") + PCAP_SRC_IP +
                           string(" src-port=") + PCAP_SRC_PORT +
                           string(" ! ") +
-                          string(" application/x-rtp,payload=96 ! rtph264depay name=rtspdepay ! videotee. ");
+                          string(" application/x-rtp,payload=96 ! rtpjitterbuffer latency=100 ! rtph264depay name=rtspdepay ! videotee. ");
     } else {
         pipeline_string = string("tee name=videotee ! queue ! fakesink ") +
                           string("rtspsrc name=rtspsource location=" + rtsp_url +
@@ -1173,7 +1175,7 @@ gboolean RtspPipelineHandler::start_streaming() {
     start_recording_video(prepare_next_file_name(), pipeline); //Need to check this
 
     g_print("Starting pipeline, not transmitting yet\n");
-    if (FROM_PCAP) {
+    if (START_WEBRTC) {
         /*std::string peer_id;
         cout << "Please enter peer id \n";
         getline(cin, peer_id);
@@ -1294,7 +1296,7 @@ main(int argc, char *argv[]) {
     RtspPipelineHandlerPtr rtspPipelineHandlerPtr = std::make_shared<RtspPipelineHandler>();
     rtspPipelineHandlerPtr->pipeline_execution_id = generate_random_int();
     rtspPipelineHandlerPtr->device_id = "";
-    rtspPipelineHandlerPtr->rtsp_url = "";
+    rtspPipelineHandlerPtr->rtsp_url = "rtsp://10.142.138.91/z3-1.mp4";
     rtspPipelineHandlerPtr->start_streaming();
     if (rtspPipelineHandlerPtr->pipeline == NULL) {
         g_print("Pipeline cannot be created \n");

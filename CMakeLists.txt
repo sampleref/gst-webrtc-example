@@ -19,9 +19,12 @@ include_directories(
         /usr/local/include/json-glib-1.0)
 
 set(SOURCE_FILES_WEBRTC_1_N rtsp_webrtc_1_n.cpp)
+set(SOURCE_FILES_WEBRTC_PEER webrtc_client_peer.cpp)
 
 link_directories(${GSTLIBS_LIBRARY_DIRS})
 
 add_executable(rtsp2webrtc_1_n ${SOURCE_FILES_WEBRTC_1_N})
+add_executable(webrtc_client_peer ${SOURCE_FILES_WEBRTC_PEER})
 
 target_link_libraries(rtsp2webrtc_1_n ${GSTLIBS_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(webrtc_client_peer ${GSTLIBS_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
